@@ -1,189 +1,697 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kavun</title>
+    <title>ComRats - Инди Игры на Unity</title>
     <style>
-        body, html {
+        :root {
+            --primary-color: #e05d5d;
+            --dark-color: #1a1a1a;
+            --light-color: #f5f5f5;
+            --accent-color: #ff7b7b;
+        }
+        
+        * {
             margin: 0;
             padding: 0;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Arial', sans-serif;
-            overflow: hidden;
-            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
-        .kavun-text {
-            font-size: 20vw;
-            font-weight: bold;
-            text-align: center;
-            color: white;
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
-            z-index: 10;
-            position: relative;
-            margin-bottom: 80px;
+        body {
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            overflow-x: hidden;
         }
         
-        .donate-link {
-            position: absolute;
-            bottom: 20px;
-            z-index: 20;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(5px);
-            padding: 12px 25px;
-            border-radius: 30px;
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
         
-        .donate-link:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .bubbles {
-            position: absolute;
+        /* Header Styles */
+        header {
+            padding: 20px 0;
+            position: fixed;
             width: 100%;
-            height: 100%;
             top: 0;
+            z-index: 100;
+            transition: background-color 0.3s ease;
+        }
+        
+        header.scrolled {
+            background-color: rgba(26, 26, 26, 0.9);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 40px;
+            width: auto;
+            margin-right: 10px;
+            animation: pulse 2s infinite alternate;
+        }
+        
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 30px;
+        }
+        
+        nav ul li a {
+            color: var(--light-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+            position: relative;
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary-color);
+        }
+        
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
             left: 0;
-            z-index: 1;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+        
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
             overflow: hidden;
         }
         
-        .bubble {
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s forwards 0.5s;
+        }
+        
+        .hero h2 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+        
+        .hero-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--primary-color);
+            color: var(--light-color);
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .hero-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(224, 93, 93, 0.3);
+        }
+        
+        .hero-bg {
             position: absolute;
-            bottom: -100px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            animation: rise 10s infinite ease-in;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            background: linear-gradient(45deg, transparent, rgba(224, 93, 93, 0.1));
+            clip-path: polygon(25% 0%, 100% 0%, 100% 100%, 0% 100%);
         }
         
-        .bubble:nth-child(1) {
-            width: 40px;
-            height: 40px;
-            left: 10%;
-            animation-duration: 8s;
+        /* About Section */
+        .about {
+            padding: 100px 0;
         }
         
-        .bubble:nth-child(2) {
-            width: 20px;
-            height: 20px;
-            left: 20%;
-            animation-duration: 5s;
-            animation-delay: 1s;
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
         }
         
-        .bubble:nth-child(3) {
-            width: 50px;
-            height: 50px;
-            left: 35%;
-            animation-duration: 7s;
-            animation-delay: 2s;
+        .section-title h3 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
         }
         
-        .bubble:nth-child(4) {
-            width: 80px;
-            height: 80px;
+        .section-title h3::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
             left: 50%;
-            animation-duration: 11s;
-            animation-delay: 0s;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary-color);
         }
         
-        .bubble:nth-child(5) {
-            width: 35px;
-            height: 35px;
-            left: 55%;
-            animation-duration: 6s;
-            animation-delay: 1s;
+        /* Team Section */
+        .team {
+            padding: 100px 0;
+            background-color: rgba(224, 93, 93, 0.05);
         }
         
-        .bubble:nth-child(6) {
-            width: 45px;
-            height: 45px;
-            left: 65%;
-            animation-duration: 8s;
-            animation-delay: 3s;
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
         }
         
-        .bubble:nth-child(7) {
-            width: 25px;
-            height: 25px;
-            left: 75%;
-            animation-duration: 7s;
-            animation-delay: 2s;
+        .team-member {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
         }
         
-        .bubble:nth-child(8) {
-            width: 80px;
-            height: 80px;
-            left: 80%;
-            animation-duration: 6s;
-            animation-delay: 1s;
+        .team-member.animated {
+            animation: fadeUp 0.5s forwards;
         }
         
-        @keyframes rise {
-            0% {
-                bottom: -100px;
-                transform: translateX(0);
+        .team-member:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .member-img {
+            height: 200px;
+            background-color: #2d2d2d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .member-img i {
+            font-size: 3rem;
+            color: var(--primary-color);
+        }
+        
+        .member-info {
+            padding: 20px;
+        }
+        
+        .member-info h4 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+        
+        .member-info p {
+            color: #cccccc;
+            font-size: 0.9rem;
+        }
+        
+        /* Portfolio Section */
+        .portfolio {
+            padding: 100px 0;
+        }
+        
+        .portfolio-placeholder {
+            text-align: center;
+            padding: 50px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 2px dashed rgba(224, 93, 93, 0.3);
+        }
+        
+        .portfolio-placeholder i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        .portfolio-placeholder h4 {
+            color: var(--light-color);
+            margin-bottom: 10px;
+        }
+        
+        /* Contact Section */
+        .contact {
+            padding: 100px 0;
+            background-color: rgba(224, 93, 93, 0.05);
+        }
+        
+        .contact-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .contact-info {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .contact-link {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            text-decoration: none;
+            color: var(--light-color);
+        }
+        
+        .contact-link:hover {
+            transform: translateX(10px);
+            background-color: rgba(224, 93, 93, 0.2);
+        }
+        
+        .contact-link i {
+            margin-right: 15px;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .contact-form {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #cccccc;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--light-color);
+            border-radius: 5px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .form-group textarea {
+            height: 150px;
+            resize: vertical;
+        }
+        
+        .submit-btn {
+            padding: 12px 30px;
+            background-color: var(--primary-color);
+            color: var(--light-color);
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(224, 93, 93, 0.3);
+        }
+        
+        /* Footer */
+        footer {
+            padding: 30px 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .footer-logo {
+            margin-bottom: 20px;
+        }
+        
+        .footer-logo img {
+            height: 30px;
+            margin-bottom: 10px;
+        }
+        
+        .copyright {
+            color: #999;
+            font-size: 0.9rem;
+        }
+        
+        /* Animations */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
             }
-            50% {
-                transform: translateX(100px);
-            }
-            100% {
-                bottom: 1080px;
-                transform: translateX(-200px);
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
         
-        @keyframes gradientBG {
-            0% {
-                background-position: 0% 50%;
+        @keyframes pulse {
+            from {
+                transform: scale(1);
             }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
+            to {
+                transform: scale(1.1);
             }
         }
         
-        @media (max-width: 600px) {
-            .kavun-text {
-                font-size: 25vw;
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+            
+            nav {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
             }
         }
         
-        @media (min-width: 1200px) {
-            .kavun-text {
-                font-size: 15vw;
-            }
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--light-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* Logo Animation */
+        .logo-animation {
+            position: relative;
+            width: 60px;
+            height: 60px;
+        }
+        
+        .triangle {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 30px solid var(--primary-color);
+            opacity: 0.9;
+            transition: transform 0.3s ease;
+        }
+        
+        .triangle:nth-child(1) {
+            transform: translate(-5px, 5px) rotate(180deg);
+        }
+        
+        .triangle:nth-child(2) {
+            transform: translate(20px, 5px) rotate(180deg);
+        }
+        
+        .triangle:nth-child(3) {
+            transform: translate(8px, 25px);
+        }
+        
+        .logo:hover .triangle:nth-child(1) {
+            transform: translate(-8px, 3px) rotate(180deg);
+        }
+        
+        .logo:hover .triangle:nth-child(2) {
+            transform: translate(23px, 3px) rotate(180deg);
+        }
+        
+        .logo:hover .triangle:nth-child(3) {
+            transform: translate(8px, 28px);
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="bubbles">
-        <div class="bubble"></div>
-        <div class="bubble"></div>
-        <div class="bubble"></div>
-        <div class="bubble"></div>
-        <div class="bubble"></div>
-        <div class="bubble"></div>
-        <div class="bubble"></div>
-        <div class="bubble"></div>
-    </div>
-    
-    <div class="kavun-text">Kavun</div>
-    <a href="https://www.donationalerts.com/r/xapor13" class="donate-link" target="_blank">Поддержать</a>
+    <!-- Header -->
+    <header id="header">
+        <div class="container header-content">
+            <div class="logo">
+                <div class="logo-animation">
+                    <div class="triangle"></div>
+                    <div class="triangle"></div>
+                    <div class="triangle"></div>
+                </div>
+                <h1>ComRats</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home">Главная</a></li>
+                    <li><a href="#about">О нас</a></li>
+                    <li><a href="#team">Команда</a></li>
+                    <li><a href="#portfolio">Игры</a></li>
+                    <li><a href="#contact">Контакты</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container hero-content">
+            <h2>Создаем инди игры на Unity</h2>
+            <p>ComRats - команда талантливых разработчиков, создающих уникальные игровые миры. Наша страсть - воплощать креативные идеи в увлекательные игры.</p>
+            <a href="#portfolio" class="hero-btn">Наши проекты</a>
+        </div>
+        <div class="hero-bg"></div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-title">
+                <h3>О нас</h3>
+            </div>
+            <p>Мы - ComRats, студия инди-разработки, специализирующаяся на создании игр с использованием Unity. Наша команда состоит из талантливых программистов, дизайнеров и сценаристов, объединенных общей страстью к игровой индустрии.</p>
+            <br>
+            <p>Мы верим в силу креативности и инноваций, стремясь создавать игры, которые не только развлекают, но и вдохновляют игроков. Каждый проект - это уникальное путешествие, в которое мы вкладываем свою душу и профессионализм.</p>
+            <br>
+            <p>Наша цель - расширять границы возможного в игровой индустрии, создавая запоминающиеся и увлекательные игровые миры.</p>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="team">
+        <div class="container">
+            <div class="section-title">
+                <h3>Наша команда</h3>
+            </div>
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="member-img">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="member-info">
+                        <h4>Никита Дикий Пёс</h4>
+                        <p>Программист, левел дизайнер, режиссёр</p>
+                    </div>
+                </div>
+                
+                <div class="team-member">
+                    <div class="member-img">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="member-info">
+                        <h4>Алексей Xapor</h4>
+                        <p>Программист, левел дизайнер, режиссёр</p>
+                    </div>
+                </div>
+                
+                <div class="team-member">
+                    <div class="member-img">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="member-info">
+                        <h4>Иван Irsino</h4>
+                        <p>Режиссёр, сценарист, гений</p>
+                    </div>
+                </div>
+                
+                <div class="team-member">
+                    <div class="member-img">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="member-info">
+                        <h4>Алексей Some One</h4>
+                        <p>Программист, 3D художник, спортсмен, СММ</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="portfolio">
+        <div class="container">
+            <div class="section-title">
+                <h3>Наши игры</h3>
+            </div>
+            <div class="portfolio-placeholder">
+                <i class="fas fa-gamepad"></i>
+                <h4>Скоро здесь появятся наши проекты</h4>
+                <p>Мы работаем над созданием увлекательных игр. Следите за обновлениями!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-title">
+                <h3>Связаться с нами</h3>
+            </div>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <a href="https://github.com/Kavun-Studio" class="contact-link" target="_blank">
+                        <i class="fab fa-github"></i>
+                        <span>GitHub: Kavun-Studio</span>
+                    </a>
+                    <div class="contact-link">
+                        <i class="fas fa-code-branch"></i>
+                        <span>Unity 2D/3D</span>
+                    </div>
+                    <div class="contact-link">
+                        <i class="fas fa-users"></i>
+                        <span>Для геймеров и программистов</span>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Имя</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Сообщение</label>
+                            <textarea id="message" name="message" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Отправить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-logo">
+                <div class="logo-animation">
+                    <div class="triangle"></div>
+                    <div class="triangle"></div>
+                    <div class="triangle"></div>
+                </div>
+                <h3>ComRats</h3>
+            </div>
+            <p class="copyright">© 2025 ComRats. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // Team member animation on scroll
+        const teamMembers = document.querySelectorAll('.team-member');
+        
+        const observerOptions = {
+            threshold: 0.2
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        teamMembers.forEach(member => {
+            observer.observe(member);
+        });
+        
+        // Form submission
+        const contactForm = document.getElementById('contactForm');
+        
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // В реальном проекте здесь был бы код для отправки формы
+            alert('Спасибо за ваше сообщение! В настоящее время форма находится в разработке.');
+            contactForm.reset();
+        });
+    </script>
 </body>
 </html>
