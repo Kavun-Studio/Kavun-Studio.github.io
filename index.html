@@ -417,7 +417,7 @@
             }
             
             nav {
-                display: none;
+                display: NONE;
             }
             
             .mobile-menu-btn {
@@ -465,7 +465,7 @@
             transform: translate(8px, 25px);
         }
         
-        .logo:hover .triangle:nth-child(1) {
+        .logo:hover .triangle:nth-child {
             transform: translate(-8px, 3px) rotate(180deg);
         }
         
@@ -478,7 +478,7 @@
         }
         
         /* Cursor Ball */
-        .cursor-ball {
+        .cursor-pointer {
             position: fixed;
             width: 16px;
             height: 16px;
@@ -486,11 +486,16 @@
             border-radius: 50%;
             pointer-events: none;
             z-index: 9999;
-            transform: translate(-50%, -50%);
-            transition: all 0.1s ease;
+            opacity: 1;
+            will-change: transform;
+            transform: opacity 0.3s ease;
+        }
+        
+        .cursor-hidden {
+            opacity: 0;
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <!-- Header -->
@@ -514,7 +519,7 @@
                 </ul>
             </nav>
             <button class="mobile-menu-btn">
-                <i class="fas fa-bars"></i>
+                <i class="fas fa-circle"></i>
             </button>
         </div>
     </header>
@@ -522,8 +527,8 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="container hero-content">
-            <h2>Создаем инди игры на Unity</h2>
-            <p>ComRats - команда талантливых разработчиков, создающих уникальные игровые миры. Наша страсть - воплощать креативные идеи в увлекательные игры.</p>
+            <h2>Создаём инди-игры на Unity</h2>
+            <p>ComRats — команда талантливых разработчиков, создающих уникальные игровые миры. Наша страсть — воплощать мечты в креативные идеи в игре.</p>
             <a href="#portfolio" class="hero-btn">Наши проекты</a>
         </div>
         <div class="hero-bg"></div>
@@ -535,11 +540,11 @@
             <div class="section-title">
                 <h3>О нас</h3>
             </div>
-            <p>Мы - ComRats, студия инди-разработки, специализирующаяся на создании игр с использованием Unity. Наша команда состоит из талантливых программистов, дизайнеров и сценаристов, объединенных общей страстью к игровой индустрии.</p>
+            <p>Мы — ComRats, студия инди-разработки, специализирующаяся на создании игр с использованием Unity. Наша команда состоит из талантливых программистов, дизайнеров и сценаристов, объединённых общей страстью к игровой индустрии.</p>
             <br>
-            <p>Мы верим в силу креативности и инноваций, стремясь создавать игры, которые не только развлекают, но и вдохновляют игроков. Каждый проект - это уникальное путешествие, в которое мы вкладываем свою душу и профессионализм.</p>
+            <p>Мы верим в силу креативности и инноваций, создавая игры, которые не только развлекают, но и вдохновляют других игроков. Каждый проект — это уникальное путешествие, в которое мы вкладываем всю душу и профессионализм.</p>
             <br>
-            <p>Наша цель - расширять границы возможного в игровой индустрии, создавая запоминающиеся и увлекательные игровые миры.</p>
+            <p>Наша цель — расширять границы возможного в игровой индустрии, создавая запоминающиеся и увлекательные игровые миры.</p>
         </div>
     </section>
 
@@ -586,7 +591,7 @@
                     </div>
                     <div class="member-info">
                         <h4>Some One</h4>
-                        <p>Программист, 3D художник, спортсмен, СММ</p>
+                        <p>Программист, 3D-модельер, спортсмен, СММ</p>
                     </div>
                 </div>
             </div>
@@ -601,8 +606,8 @@
             </div>
             <div class="portfolio-placeholder">
                 <i class="fas fa-gamepad"></i>
-                <h4>Скоро здесь появятся наши проекты</h4>
-                <p>Мы работаем над созданием увлекательных игр. Следите за обновлениями!</p>
+                <h4>Скоро здесь появятся наши проекты!</h4>
+                <p>Мы работаем над созданием увлекательных игр. Следите за новостями!</p>
             </div>
         </div>
     </section>
@@ -621,7 +626,7 @@
                     </a>
                     <div class="contact-link">
                         <i class="fas fa-code-branch"></i>
-                        <span>Unity 2D/3D</span>
+                        <span>Работа с Unity 2D/3D</span>
                     </div>
                     <div class="contact-link">
                         <i class="fas fa-users"></i>
@@ -632,17 +637,17 @@
                     <form id="contactForm">
                         <div class="form-group">
                             <label for="name">Имя</label>
-                            <input type="text" id="name" name="name" required>
+                            <input id="name" name="name" type="text" required>
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" id="email" name="email" required>
+                            <input id="email" name="email" type="email" required>
                         </div>
                         <div class="form-group">
                             <label for="message">Сообщение</label>
                             <textarea id="message" name="message" required></textarea>
                         </div>
-                        <button type="submit" class="submit-btn">Отправить</button>
+                        <button class="submit-btn" type="submit">Отправить</button>
                     </form>
                 </div>
             </div>
@@ -667,7 +672,7 @@
     <script>
         // Header scroll effect
         window.addEventListener('scroll', function() {
-            const header = document.getElementById('header');
+            const header = document.querySelector('#header-id');
             if (window.scrollY > 50) {
                 header.classList.add('scrolled');
             } else {
@@ -685,7 +690,7 @@
         const observer = new IntersectionObserver(function(entries) {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('animated');
+                    entry.target.classList.add('entry-point');
                     observer.unobserve(entry.target);
                 }
             });
@@ -695,35 +700,54 @@
             observer.observe(member);
         });
         
-        // Form submission
-        const contactForm = document.getElementById('contactForm');
+        // Form submission handling
+        const contactForm = document.querySelector('#contact-form');
         
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // В реальном проекте здесь был бы код для отправки формы
-            alert('Спасибо за ваше сообщение! В настоящее время форма находится в разработке.');
+            // Placeholder for actual form submission logic
+            alert('Спасибо за ваше сообщение! Форма пока в разработке.');
             contactForm.reset();
         });
         
-        // Cursor ball effect
-        const cursorBall = document.createElement('div');
-        cursorBall.classList.add('cursor-ball');
-        document.body.appendChild(cursorBall);
+        // Optimized cursor effect
+        const cursor = document.createElement('div');
+        cursor.classList.add('cursor-pointer');
+        document.body.appendChild(cursor);
         
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        const speed = 0.2; // Smoothing factor for cursor movement
+        
+        function animateCursor() {
+            // Linear interpolation for smooth movement
+            cursorX += (mouseX - cursorX) * speed;
+            cursorY += (mouseY - cursorY) * speed;
+            
+            // Use transform for better performance
+            cursor.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
+            
+            requestAnimationFrame(animateCursor);
+        }
+        
+        // Start animation loop
+        animateCursor();
+        
+        // Update mouse position
         document.addEventListener('mousemove', (e) => {
-            cursorBall.style.left = e.clientX + 'px';
-            cursorBall.style.top = e.clientY + 'px';
+            mouseX = e.clientX - 8; // Offset to center the cursor (16px / 2)
+            mouseY = e.clientY - 8;
         });
         
-        // Hide cursor ball when leaving the window
+        // Hide cursor when leaving the window
         document.addEventListener('mouseleave', () => {
-            cursorBall.style.opacity = '0';
+            cursor.classList.add('cursor-hidden');
         });
         
-        // Show cursor ball when entering the window
+        // Show cursor when entering the window
         document.addEventListener('mouseenter', () => {
-            cursorBall.style.opacity = '1';
+            cursor.classList.remove('cursor-hidden');
         });
     </script>
 </body>
