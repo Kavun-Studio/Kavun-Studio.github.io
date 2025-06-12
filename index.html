@@ -476,6 +476,19 @@
         .logo:hover .triangle:nth-child(3) {
             transform: translate(8px, 28px);
         }
+        
+        /* Cursor Ball */
+        .cursor-ball {
+            position: fixed;
+            width: 16px;
+            height: 16px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: all 0.1s ease;
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -691,6 +704,26 @@
             // В реальном проекте здесь был бы код для отправки формы
             alert('Спасибо за ваше сообщение! В настоящее время форма находится в разработке.');
             contactForm.reset();
+        });
+        
+        // Cursor ball effect
+        const cursorBall = document.createElement('div');
+        cursorBall.classList.add('cursor-ball');
+        document.body.appendChild(cursorBall);
+        
+        document.addEventListener('mousemove', (e) => {
+            cursorBall.style.left = e.clientX + 'px';
+            cursorBall.style.top = e.clientY + 'px';
+        });
+        
+        // Hide cursor ball when leaving the window
+        document.addEventListener('mouseleave', () => {
+            cursorBall.style.opacity = '0';
+        });
+        
+        // Show cursor ball when entering the window
+        document.addEventListener('mouseenter', () => {
+            cursorBall.style.opacity = '1';
         });
     </script>
 </body>
